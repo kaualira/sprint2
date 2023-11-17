@@ -47,3 +47,13 @@
 <?php
   include_once("templates/footer.php");
 ?>
+
+<!-- Participantes:
+
+Júlião Pombero Mogi
+Kauã Lira Yasumura
+Kauan Silva Vieira
+Laura Perez
+Leticia Gabrielly
+Luis 
+Thell Zardi -->
