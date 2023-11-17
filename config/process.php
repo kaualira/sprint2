@@ -13,18 +13,22 @@
     // Criar contato
     if($data["type"] === "create") {
 
-      $name = $data["name"];
-      $phone = $data["phone"];
-      $observations = $data["observations"];
-
-      $query = "INSERT INTO contacts (name, phone, observations) VALUES (:name, :phone, :observations)";
+      $name = $data["Nome"];
+      $add = $data["Endereco"];
+      $tele = $data["Telefone"];
+      $cel = $data["Celular"];
+      $cpf = $data["CPF"];
+      
+      $query = "INSERT INTO Cliente (Nome, Endereco, Telefone, Celular, CPF) VALUES (:Nome, :Endereco, :Telefone, :Celular, :CPF)";
 
       $stmt = $conn->prepare($query);
 
-      $stmt->bindParam(":name", $name);
-      $stmt->bindParam(":phone", $phone);
-      $stmt->bindParam(":observations", $observations);
-
+      $stmt->bindParam(":Nome", $name);
+      $stmt->bindParam(":Endereco", $add);
+      $stmt->bindParam(":Telefone", $tele);
+      $stmt->bindParam(":Celular", $cel);
+      $stmt->bindParam(":CPF", $cpf);
+      
       try {
 
         $stmt->execute();
@@ -33,26 +37,31 @@
       } catch(PDOException $e) {
         // erro na conexão
         $error = $e->getMessage();
-        echo "Erro: $error";
+        $_SESSION["msg"] = "Erro: $error";
+        //echo "Erro: $error";
       }
 
     } else if($data["type"] === "edit") {
 
-      $name = $data["name"];
-      $phone = $data["phone"];
-      $observations = $data["observations"];
-      $id = $data["id"];
+      $name = $data["Nome"];
+      $add = $data["Endereco"];
+      $tele = $data["Telefone"];
+      $cel = $data["Celular"];
+      $cpf = $data["CPF"];
+      $CC = $data["CodCliente"];
 
-      $query = "UPDATE contacts 
-                SET name = :name, phone = :phone, observations = :observations 
-                WHERE id = :id";
+      $query = "UPDATE Cliente
+                SET Nome = :Nome, Endereco = :Endereco, Telefone = :Telefone, Celular = :Celular, CPF = :CPF
+                WHERE CodCliente = :CodCliente";
 
       $stmt = $conn->prepare($query);
 
-      $stmt->bindParam(":name", $name);
-      $stmt->bindParam(":phone", $phone);
-      $stmt->bindParam(":observations", $observations);
-      $stmt->bindParam(":id", $id);
+      $stmt->bindParam(":Nome", $name);
+      $stmt->bindParam(":Endereco", $add);
+      $stmt->bindParam(":Telefone", $tele);
+      $stmt->bindParam(":Celular", $cel);
+      $stmt->bindParam(":CPF", $cpf);
+      $stmt->bindParam(":CodCliente", $CC);
 
       try {
 
@@ -67,13 +76,13 @@
 
     } else if($data["type"] === "delete") {
 
-      $id = $data["id"];
+      $CC = $data["CodCliente"];
 
-      $query = "DELETE FROM contacts WHERE id = :id";
+      $query = "DELETE FROM Cliente WHERE CodCliente = :CodCliente";
 
       $stmt = $conn->prepare($query);
 
-      $stmt->bindParam(":id", $id);
+      $stmt->bindParam(":CodCliente", $CC);
       
       try {
 
@@ -94,20 +103,20 @@
   // SELEÇÃO DE DADOS
   } else {
     
-    $id;
+    $CC;
 
     if(!empty($_GET)) {
-      $id = $_GET["id"];
+      $CC = $_GET["id"];
     }
 
     // Retorna o dado de um contato
-    if(!empty($id)) {
+    if(!empty($CC)) {
 
-      $query = "SELECT * FROM contacts WHERE id = :id";
+      $query = "SELECT * FROM Cliente WHERE CodCliente = :CodCliente";
 
       $stmt = $conn->prepare($query);
 
-      $stmt->bindParam(":id", $id);
+      $stmt->bindParam(":CodCliente", $CC);
 
       $stmt->execute();
 
@@ -118,7 +127,7 @@
       // Retorna todos os contatos
       $contacts = [];
 
-      $query = "SELECT * FROM contacts";
+      $query = "SELECT * FROM Cliente";
 
       $stmt = $conn->prepare($query);
 
